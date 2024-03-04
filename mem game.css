@@ -1,0 +1,47 @@
+body {
+    background: url("mem bg.jpg");
+    background-size: 100% 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    color: black; /* Change text color to black */
+}
+html, body {
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}
+
+#errors, #qwerty {
+    background-color: white; /* Set background color of the box */
+    color: black; /* Set text color to black */
+    padding: 10px; /* Add padding for space around the text */
+    margin: 5px; /* Adjust margin as needed */
+    display: inline-block; /* Ensure the box wraps around the text */
+}
+
+#board {
+    height: 320px;
+    width: 450px;
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    background-color: black;
+    border: 10px solid lightgrey;
+}
+
+.card {
+    height: 128px;
+    width: 90px;
+    margin: 11px;
+}
+
+.card-container {
+    width: 100px; /* Adjust as needed */
+    height: 150px; /* Adjust as needed */
+    display: inline-block; /* Ensures they appear in a row */
+    margin: 5px; /* Adjust as needed */
+}

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spell It</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url("spell_bee bg.jpg");
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+
+        .all {
+            text-align: center;
+        }
+
+        .user {
+            font-size: 24px;
+            width: 300px;
+            padding: 10px;
+            border: none;
+            border-bottom: 2px solid #fff;
+            background: transparent;
+            color: white;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .submit {
+            background-color: rgb(230, 4, 143);
+            color: white;
+            border: none;
+            font-weight: bold;
+            height: 40px;
+            width: 150px;
+            border-radius: 18px;
+            cursor: pointer;
+            transition: background-color 0.5s, color 0.5s;
+            margin: 5px;
+            outline: none;
+        }
+
+        .submit:hover {
+            background-color: white;
+            color: rgb(230, 4, 143);
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .submit:active {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="all">
+        <input class="user" type="text" placeholder="Enter the word" id="inp" />
+        <div class="btn-container">
+            <button id="sub" class="submit">Submit</button>
+            <div class="cont">
+                <button id="speak" class="submit">Repeat</button>
+                <button id="skip" class="submit">Next</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+<script>
+
+
+    /*getWord is a function which is asynchronous in nature
+    , i.e, it gives output on pulses and not automatically*/
+    const getWord = async () => {
+
+        /*The fetch function is used to make an HTTP request.
+        The await keyword is used here to wait for the Promise(object result) returned by fetch
+        to be resolved(successful or unsuccesful)
+        which happens when the HTTP request is complete.
+        This result is stored in variable response */
+        const response = await fetch("https://random-word-api.herokuapp.com/word");
+
+       /* When a web server responds to an HTTP request,
+        it often sends back data in the form   of a text-based format,
+        and one common format is JSON
+        it is readable by machine and human
+        hence we pase the promise into JSON*/
+        const data = await response.json();
+
+        //return parsed data
+        return data;
+    }
+
+    /*This a function which takes a parameter as 'word'
+    an object of SpeechSynthesisUtterance() called 'voice' is made
+    object voice has the text as word and then is spoken*/
+    const say = (word) => {
+        const voice = new SpeechSynthesisUtterance()
+        voice.text = word
+        speechSynthesis.speak(voice)
+    }  
+
+    let word;
+
+    const arr = ["ant", "apple", "ball", "banana", "beach", "bear", "butterfly", "car", "cat", "caterpillar", "cherry", "chocolate", "daisy", "dog", "dolphin", "donkey", "duck", "egg", "elephant", "firefly", "fish", "flower", "frog", "grape", "guitar", "hat", "honey", "house", "ice", "ice cream", "igloo", "island", "jacket", "jellybean", "jellyfish", "juice", "jungle", "kangaroo", "key", "kite", "kiwi", "lamp", "lemon", "lemonade", "lighthouse", "lion", "mango", "monkey", "moon", "mouse", "mushroom", "nectar", "nest", "noodle", "noodles", "notebook", "ocean", "octagon", "octopus", "orange", "panda", "peacock", "pear", "pencil", "penguin", "queen", "quilt", "quokka", "rabbit", "rain", "rainbow", "raindrop", "star", "strawberry", "sun", "sunflower", "table", "tiger", "tree", "turtle", "umbrella", "unicorn", "vampire", "vase", "violin", "volcano", "volleyball", "waffle", "walrus", "water", "watermelon", "xylophone", "yacht", "yogurt", "zebra", "zeppelin", "acorn", "apricot", "basket", "bicycle", "butter", "candle", "cheese", "chimpanzee", "cloud", "coffee", "comet", "cookie", "daisy", "diamond", "dragonfly", "feather", "firework", "giraffe", "guitar", "hamburger", "hammer", "helicopter", "hurricane", "iceberg", "jellyfish", "kangaroo", "keyhole", "koala", "lighthouse", "lollipop", "magnet", "maple", "meadow", "mountain", "muffin", "narwhal", "nebula", "ocean", "ostrich", "palm", "parrot", "peanut", "piano", "pineapple", "pumpkin", "quartz", "raccoon", "raindrop", "seashell", "shark", "snowflake", "squirrel", "strawberry", "sunflower", "tiger", "tornado", "toucan", "tulip", "umbrella", "unicorn", "vanilla", "violin", "volcano", "waffle", "watermelon", "whale", "xylophone", "yacht", "yogurt", "zebra", "zeppelin", "acoustic", "ballet", "birthday", "carousel", "cherry", "dandelion", "earring", "fireplace", "glitter", "hibiscus", "jigsaw", "kettle", "lighthouse", "macaron", "notebook", "pajamas", "quokka", "rose", "sunrise", "toothbrush", "velvet", "wallet", "zeppelin"];
+    document.getElementById('skip').addEventListener('click', function () {
+        num = Math.floor(Math.random() * (190))
+        word = arr[num]
+
+        say(word);
+        
+    })
+
+    // //For next button
+    // // It creates an event when 'skip' button is clicked
+    // document.getElementById('skip').addEventListener('click', function () {
+    //     //call the function getWord() and if the promise is successfull put the parsed json output as data
+    //     getWord().then(data => {
+    //         //speak data
+    //         say(data[0]);
+    //         //variable word has the new word
+    //         word = data[0];
+    //     });  
+    // })
+
+    //For repeat button
+    document.getElementById('speak').addEventListener('click', function () {
+        say(word)
+    })
+
+    //for submit button
+    document.getElementById('sub').addEventListener('click', function () {
+        if (document.getElementById('inp').value == word) {
+            let voice = new SpeechSynthesisUtterance()
+            voice.text = "Correct, Press Next"
+            speechSynthesis.speak(voice) 
+        }  
+        else {
+            let voice = new SpeechSynthesisUtterance()
+            voice.text = "Oops, Learn the correct spelling"
+            speechSynthesis.speak(voice)
+            alert(`${word}`)
+        }
+        document.getElementById('inp').value = ''
+    })
+</script>
