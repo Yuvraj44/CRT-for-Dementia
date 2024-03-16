@@ -12,6 +12,18 @@ html, body {
     left:0;
     right:0;
 }
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+#container {
+    text-align: center; /* Center the content inside the container */
+}
 
 #errors, #qwerty {
     /* background-color: white;  Set background color of the box */ 

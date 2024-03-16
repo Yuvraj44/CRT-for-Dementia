@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRT for Dementia</title>
+
+
     <style>
         .submit {
             position: relative;
@@ -22,10 +24,10 @@
             transition: background-colour 0.5s, color 0.5s;
             font-size: x-large;
         }
-       
+
         .submit:hover {
             background-color: white;
-            color:black;
+            color: black;
             box-shadow: 1px 1px 500px rgb(0, 0, 0);
             border: 0px;
         }
@@ -36,7 +38,7 @@
 
         a.all {
             text-decoration: none;
-        
+
         }
 
         body {
@@ -44,17 +46,31 @@
             background-size: cover;
             text-align: center;
             padding-top: 100px;
+
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        #container {
+            text-align: center;
+            /* Center the content inside the container */
         }
     </style>
 </head>
 
 <body>
-    <a href="spell_bee start.html" class="all">
-        <button id="sub" class="submit">Spell Bee</button>
-    </a>
-    <a href="mem start.html" class="all">
-        <button id="sub1" class="submit">Memory Card Game</button>
-    </a>
+    <div id="container">
+        <a href="spell_bee start.html" class="all">
+            <button id="sub" class="submit">Spell Bee</button>
+        </a>
+        <a href="mem start.html" class="all">
+            <button id="sub1" class="submit">Memory Card Game</button>
+        </a>
+    </div>
 </body>
 
 </html>
