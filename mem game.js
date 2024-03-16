@@ -49,6 +49,9 @@ function shuffleCards() {
 }
 
 function startGame() {
+    let imagesLoaded = 0; // Counter to track loaded images
+    let totalImages = rows * columns; // Total number of images to load
+
     // Arrange the board 4x2
     for (let r = 0; r < rows; r++) {
         let row = [];
@@ -66,6 +69,14 @@ function startGame() {
             card.src = cardImg + ".jpg";
             card.classList.add("card");
             card.addEventListener("click", selectCard);
+            
+            // Increment the counter when the image is loaded
+            card.onload = function() {
+                imagesLoaded++;
+                if (imagesLoaded === totalImages) {
+                    setTimeout(hideCards, 5000);
+                }
+            };
 
             // Append the card to the container
             cardContainer.appendChild(card);
@@ -77,7 +88,6 @@ function startGame() {
     }
 
     console.log(board);
-    setTimeout(hideCards, 5000);
 }
 
 function hideCards() {
