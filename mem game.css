@@ -14,11 +14,12 @@ html, body {
 }
 
 #errors, #qwerty {
-    background-color: white; /* Set background color of the box */
-    color: black; /* Set text color to black */
+    /* background-color: white;  Set background color of the box */ 
+    color: white; /* Set text color to black */
     padding: 10px; /* Add padding for space around the text */
     margin: 5px; /* Adjust margin as needed */
     display: inline-block; /* Ensure the box wraps around the text */
+    text-align: justify;
 }
 
 #board {

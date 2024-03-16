@@ -14,16 +14,32 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-image: url("spell_bee bg.jpg");
+            background-image: url("mem bg.jpg");
             background-size: cover;
             font-family: Arial, sans-serif;
+            color: white;
+            /* Set default text color */
         }
 
-        .all {
+        .container {
             text-align: center;
         }
 
-        .user {
+        #qwerty {
+            text-align: justify;
+            /* background-color:white; */
+            /* Set background color of the box */
+            color: white;
+            /* Set text color to black */
+            padding: 10px;
+            /* Add padding for space around the text */
+            margin-bottom: 50px;
+            /* Adjust margin as needed */
+            display: inline-block;
+            /* Ensure the box wraps around the text */
+        }
+
+        .input-field {
             font-size: 24px;
             width: 300px;
             padding: 10px;
@@ -37,12 +53,13 @@
 
         .btn-container {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            margin-top: 20px;
         }
 
         .submit {
-            background-color: rgb(230, 4, 143);
+            background-color: black;
             color: white;
             border: none;
             font-weight: bold;
@@ -57,7 +74,7 @@
 
         .submit:hover {
             background-color: white;
-            color: rgb(230, 4, 143);
+            color: black;
             box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
         }
 
@@ -68,8 +85,17 @@
 </head>
 
 <body>
-    <div class="all">
-        <input class="user" type="text" placeholder="Enter the word" id="inp" />
+    <div class="container">
+        <h2>
+            <span id="qwerty">
+                1. Press Next to get a new word and start playing.<br>
+                2. Press Repeat to hear the word again.<br>
+                3. Type the correct spelling in the text box provided.<br>
+                4. Press Submit to check if the spelling is correct.<br>
+            </span>
+        </h2>
+        
+        <input class="input-field" type="text" placeholder="Enter the word" id="inp" />
         <div class="btn-container">
             <button id="sub" class="submit">Submit</button>
             <div class="cont">
@@ -78,6 +104,8 @@
             </div>
         </div>
     </div>
+
+
 </body>
 
 </html>
@@ -97,11 +125,11 @@
         This result is stored in variable response */
         const response = await fetch("https://random-word-api.herokuapp.com/word");
 
-       /* When a web server responds to an HTTP request,
-        it often sends back data in the form   of a text-based format,
-        and one common format is JSON
-        it is readable by machine and human
-        hence we pase the promise into JSON*/
+        /* When a web server responds to an HTTP request,
+         it often sends back data in the form   of a text-based format,
+         and one common format is JSON
+         it is readable by machine and human
+         hence we pase the promise into JSON*/
         const data = await response.json();
 
         //return parsed data
@@ -115,7 +143,7 @@
         const voice = new SpeechSynthesisUtterance()
         voice.text = word
         speechSynthesis.speak(voice)
-    }  
+    }
 
     let word;
 
@@ -125,7 +153,7 @@
         word = arr[num]
 
         say(word);
-        
+
     })
 
     // //For next button
@@ -146,18 +174,23 @@
     })
 
     //for submit button
-    document.getElementById('sub').addEventListener('click', function () {
-        if (document.getElementById('inp').value == word) {
-            let voice = new SpeechSynthesisUtterance()
-            voice.text = "Correct, Press Next"
-            speechSynthesis.speak(voice) 
-        }  
-        else {
-            let voice = new SpeechSynthesisUtterance()
-            voice.text = "Oops, Learn the correct spelling"
-            speechSynthesis.speak(voice)
-            alert(`${word}`)
-        }
-        document.getElementById('inp').value = ''
-    })
+document.getElementById('sub').addEventListener('click', function () {
+    // Convert input value and word to lowercase for case-insensitive comparison
+    const inputValue = document.getElementById('inp').value.toLowerCase();
+    const lowercaseWord = word.toLowerCase();
+
+    if (inputValue === lowercaseWord) {
+        let voice = new SpeechSynthesisUtterance()
+        voice.text = "Correct, Press Next"
+        speechSynthesis.speak(voice)
+    }
+    else {
+        let voice = new SpeechSynthesisUtterance()
+        voice.text = "Oops, Learn the correct spelling"
+        speechSynthesis.speak(voice)
+        alert(`${word}`)
+    }
+    document.getElementById('inp').value = ''
+})
+
 </script>
