@@ -49,6 +49,7 @@ function shuffleCards() {
 }
 
 function startGame() {
+   
     let imagesLoaded = 0; // Counter to track loaded images
     let totalImages = rows * columns; // Total number of images to load
 
@@ -91,6 +92,7 @@ function startGame() {
 }
 
 function hideCards() {
+    
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < columns; c++) {
             let card = document.getElementById(r.toString() + "-" + c.toString());
@@ -100,7 +102,7 @@ function hideCards() {
 }
 
 function selectCard() {
-
+    
     if (this.src.includes("back")) {
         if (!card1Selected) {
             card1Selected = this;
@@ -140,19 +142,24 @@ function update() {
         card2Selected.src = "back.jpg";
         errors += 1;
         document.getElementById("errors").innerText = "Error: " + errors; // Concatenate "Error: " with the error count
+        document.getElementById("errors").innerText = "Error: " + errors; // Concatenate "Error: " with the error count
+        document.getElementById("buzzer-sound").play();
     }
      else {
         // Cards are the same, so remove them from the board
         card1Selected.style.display = "none";
         card2Selected.style.display = "none";
         pairsFound++;
+        document.getElementById("bell-sound").play(); // Play bell sound
         if (pairsFound === totalPairs) {
-            speak("Congrats, You Won");
+            setTimeout(function() {
+                document.getElementById("win-sound").play(); // Play win sound after 1 second delay
+            }, 1000); // Delay of 1000 milliseconds (1 second)
             setTimeout(function() {
                 resetGame();
-            }, 3000);
+            }, 4000); // Reset the game after 4 seconds (including the 1-second delay)
             return;
-        }
+        }        
     }
 
     card1Selected = null;
