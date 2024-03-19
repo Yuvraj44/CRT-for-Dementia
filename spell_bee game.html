@@ -16,7 +16,7 @@
             height: 100vh;
             background-image: url("mem bg.jpg");
             background-size: cover;
-            font-family: Arial, sans-serif;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
             color: white;
             /* Set default text color */
         }
@@ -27,16 +27,10 @@
 
         #qwerty {
             text-align: justify;
-            /* background-color:white; */
-            /* Set background color of the box */
             color: white;
-            /* Set text color to black */
             padding: 10px;
-            /* Add padding for space around the text */
             margin-bottom: 50px;
-            /* Adjust margin as needed */
             display: inline-block;
-            /* Ensure the box wraps around the text */
         }
 
         .input-field {
@@ -49,6 +43,7 @@
             color: white;
             margin-bottom: 20px;
             outline: none;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
         }
 
         .btn-container {
@@ -70,6 +65,7 @@
             transition: background-color 0.5s, color 0.5s;
             margin: 5px;
             outline: none;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
         }
 
         .submit:hover {
@@ -81,6 +77,12 @@
         .submit:active {
             opacity: 0.8;
         }
+
+        #score {
+            font-size: 30px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+        }
     </style>
 </head>
 
@@ -88,110 +90,75 @@
     <div class="container">
         <h2>
             <span id="qwerty">
-                1. Press Next to get a new word and start playing.<br>
-                2. Press Repeat to hear the word again.<br>
-                3. Type the correct spelling in the text box provided.<br>
-                4. Press Submit to check if the spelling is correct.<br>
+                1. Press Repeat to hear the word again.<br>
+                2. Type the correct spelling in the text box provided.<br>
             </span>
         </h2>
-        
+        <div id="score">Score: 0</div>
         <input class="input-field" type="text" placeholder="Enter the word" id="inp" />
         <div class="btn-container">
             <button id="sub" class="submit">Submit</button>
-            <div class="cont">
-                <button id="speak" class="submit">Repeat</button>
-                <button id="skip" class="submit">Next</button>
-            </div>
+            <button id="speak" class="submit">Repeat</button>
         </div>
     </div>
-
-
 </body>
-
-</html>
 
 
 <script>
-
-
-    /*getWord is a function which is asynchronous in nature
-    , i.e, it gives output on pulses and not automatically*/
-    const getWord = async () => {
-
-        /*The fetch function is used to make an HTTP request.
-        The await keyword is used here to wait for the Promise(object result) returned by fetch
-        to be resolved(successful or unsuccesful)
-        which happens when the HTTP request is complete.
-        This result is stored in variable response */
-        const response = await fetch("https://random-word-api.herokuapp.com/word");
-
-        /* When a web server responds to an HTTP request,
-         it often sends back data in the form   of a text-based format,
-         and one common format is JSON
-         it is readable by machine and human
-         hence we pase the promise into JSON*/
-        const data = await response.json();
-
-        //return parsed data
-        return data;
-    }
-
-    /*This a function which takes a parameter as 'word'
-    an object of SpeechSynthesisUtterance() called 'voice' is made
-    object voice has the text as word and then is spoken*/
-    const say = (word) => {
-        const voice = new SpeechSynthesisUtterance()
-        voice.text = word
-        voice.rate=0.5;
-        speechSynthesis.speak(voice)
-    }
-
     let word;
+    let score = 0;
+    const arr = ["Above", "Abroad", "Access", "Accomplish", "Achieve", "Achievement", "Acknowledgement", "Add", "Additional", "Adjust", "Admiring", "After", "Air", "Action", "Alone", "And", "Another", "Animal", "Answer", "Around", "Art", "Ask", "Attach", "At", "Attain", "Auspicious", "Away", "Avoid", "Baby", "Back", "Balance", "Banana", "Bark", "Basket", "Beach", "Beat", "Beautiful", "Because", "Bed", "Before", "Belated", "Believe", "Belong", "Below", "Benefit", "Best", "Better", "Bill", "Billion", "Birth", "Blood", "Bloom", "Body", "Book", "Bore", "Both", "Bottle", "Boy", "Branches", "Breed", "Brother", "Bucket", "Building", "Built", "But", "Buy", "Cap", "Capital", "Captain", "Captivate", "Capture", "Car", "Cardiac", "Careless", "Carnival", "Carry", "Cash", "Casual", "Catastrophe", "Catch", "Categorise", "Ceremony", "Certain", "Challenge", "Chart", "Chief", "Child", "Children", "Church", "Circle", "City", "Clap", "Class", "Clouds", "Coat", "Cold", "Colour", "Column", "Come", "Commit", "Communicate", "Complete", "Concentrate", "Conclude", "Concrete", "Confuse", "Congested", "Congratulate", "Cook", "Cordial", "Country", "Cover", "Cow", "Craft", "Cravings", "Create", "Crop", "Crowd", "Crush", "Cry", "Cunning", "Cup", "Current", "Cut", "Dance", "Dark", "Day", "Death", "Decide", "Deep", "Defeat", "Detail", "Determined", "Different", "Disappear", "Divide", "Draw", "Dream", "Dry", "During", "Each", "East", "Eat", "Effect", "Encounter", "Energy", "Entertainment", "Evening", "Ever", "Every", "Everyone", "Everything", "Except", "Expect", "Experience", "Fabulous", "Face", "Fact", "Fake", "Family", "Fan", "Fantastic", "Far", "Farm", "Farmers", "Fast", "Fasten", "Father", "Feel", "Feet", "Fever", "Figure", "Fill", "Film", "Fine", "Finish", "Fire", "First", "Fish", "Flowers", "Fly", "Follow", "Food", "Force", "Forgive", "Formal", "Forward", "Free", "Freedom", "Frequent", "Fresh", "Friendly", "Friends", "From", "Fruits", "Fun", "Funny", "Gain", "Game", "Gas", "Genuine", "Girl", "Glory", "Go", "Good", "Government", "Great", "Greet", "Ground", "Group", "Growth", "Guess", "Guest", "Hang", "Happy", "Harsh", "Have", "He", "Head", "Health", "Her", "Him", "Hot", "How", "However", "Hurry", "Idea", "Ignore", "Illuminate", "Import", "Important", "Impossible", "Incident", "Industry", "Inferior", "Infrastructure", "Inside", "Insight", "Instant", "Interest", "Interior", "Interval", "Intimidating", "Island", "Kick", "Kid", "Kitchen", "Land", "Language", "Large", "Last", "Laugh", "Launch", "Lavish", "Leader", "Lean", "Learn", "Leave", "Leaves", "Led", "Left", "Level", "Life", "Light", "Line", "Listen", "Little", "Locate", "Loss", "Loud", "Love", "Low", "Luck", "Machine", "Made", "Magnificent", "Main", "Map", "March", "Marine", "Mark", "Marry", "Masculine", "Master", "Match", "Materials", "Matter", "Measure", "Medicine", "Meet", "Might", "Mine", "Money", "Moon", "Morning", "Mother", "Movies", "Murmur", "Name", "Near", "Need", "Never", "Night", "No", "Noon", "North", "Not", "Nothing", "Object", "Office", "Off", "Official", "Often", "Old", "Oxygen", "Paint", "Pair", "Pamper", "Paragraph", "Park", "Patty", "Peace", "Pen", "Penetrate", "People", "Perhaps", "Permit", "Person", "Phrase", "Piece", "Pillow", "Place", "Plant", "Plural", "Poem", "Polite", "Pollute", "Poor", "Possible", "Power", "Prefix", "Present", "Probably", "Problem", "Produce", "Profit", "Protection", "Punch", "Push", "Pull", "Rack", "Raft", "Rain", "Range", "Rat", "Ray", "Reach", "Realise", "Reflection", "Regain", "Random", "Rhythm", "River", "Rose", "Row", "Rule", "Run", "Sad", "Safe", "Sail", "Sand", "Saw", "Say", "Scare", "School", "Scientist", "Screen", "Sea", "Seat", "Secure", "Security", "Sentence", "Set", "Settle", "Shade", "Shadow", "Shape", "Share", "Sharp", "She", "Shine", "Ship", "Show", "Sight", "Silent", "Similar", "Single", "Sister", "Sit", "Size", "Skill", "Sky", "Sleep", "Slow", "Small", "Smile", "Smooth", "Soap", "Soil", "Solid", "Something", "Song", "Soon", "Sound", "South", "Space", "Special", "Speed", "Sports", "Spot", "Stars", "Steal", "Steel", "Story", "Street", "Strong", "Sudden", "Suffix", "Sun", "Sunlight", "Super", "Supply", "Sure", "Surrender", "Swim", "Table", "Tackle", "Talent", "Talk", "Task", "Teach", "Team", "Teenage", "Television", "Tell", "Tendency", "Tender", "Them", "They", "Thick", "Through", "Time", "Today", "Together", "Tomorrow", "Too", "Tools", "Track", "Transport ", " Treat ", " Tree ", " Up ", " Us ", " Usually ", " Value ", " Vanish ", " Various ", " Vegetables ", " Vehicle ", " Victory ", " Voice ", " Walk ", " Wander ", " Wanted ", " Warm ", " Watch ", " Water ", " Waves ", " Way ", " We ", " West ", " Wet ", " Wheels ", " When ", " Where ", " White ", " Who ", " Whoever ", " Will ", " Win ", " Wings ", " Winner ", " Wish ", " With ", " Wonder ", " Wood ", " Word ", " Work ", " Worst ", " Yawn ", " Yes ", " Yesterday ", " You "];
 
-    const arr = ["ant", "apple", "ball", "banana", "beach", "bear", "butterfly", "car", "cat", "caterpillar", "cherry", "chocolate", "daisy", "dog", "dolphin", "donkey", "duck", "egg", "elephant", "firefly", "fish", "flower", "frog", "grape", "guitar", "hat", "honey", "house", "ice", "ice cream", "igloo", "island", "jacket", "jellybean", "jellyfish", "juice", "jungle", "kangaroo", "key", "kite", "kiwi", "lamp", "lemon", "lemonade", "lighthouse", "lion", "mango", "monkey", "moon", "mouse", "mushroom", "nectar", "nest", "noodle", "noodles", "notebook", "ocean", "octagon", "octopus", "orange", "panda", "peacock", "pear", "pencil", "penguin", "queen", "quilt", "quokka", "rabbit", "rain", "rainbow", "raindrop", "star", "strawberry", "sun", "sunflower", "table", "tiger", "tree", "turtle", "umbrella", "unicorn", "vampire", "vase", "violin", "volcano", "volleyball", "waffle", "walrus", "water", "watermelon", "xylophone", "yacht", "yogurt", "zebra", "zeppelin", "acorn", "apricot", "basket", "bicycle", "butter", "candle", "cheese", "chimpanzee", "cloud", "coffee", "comet", "cookie", "daisy", "diamond", "dragonfly", "feather", "firework", "giraffe", "guitar", "hamburger", "hammer", "helicopter", "hurricane", "iceberg", "jellyfish", "kangaroo", "keyhole", "koala", "lighthouse", "lollipop", "magnet", "maple", "meadow", "mountain", "muffin", "narwhal", "nebula", "ocean", "ostrich", "palm", "parrot", "peanut", "piano", "pineapple", "pumpkin", "quartz", "raccoon", "raindrop", "seashell", "shark", "snowflake", "squirrel", "strawberry", "sunflower", "tiger", "tornado", "toucan", "tulip", "umbrella", "unicorn", "vanilla", "violin", "volcano", "waffle", "watermelon", "whale", "xylophone", "yacht", "yogurt", "zebra", "zeppelin", "acoustic", "ballet", "birthday", "carousel", "cherry", "dandelion", "earring", "fireplace", "glitter", "hibiscus", "jigsaw", "kettle", "lighthouse", "macaron", "notebook", "pajamas", "quokka", "rose", "sunrise", "toothbrush", "velvet", "wallet", "zeppelin"];
-    document.getElementById('skip').addEventListener('click', function () {
-        num = Math.floor(Math.random() * (190))
-        word = arr[num]
-
+    // Function to fetch a new word
+    function getNewWord() {
+        let num = Math.floor(Math.random() * arr.length);
+        word = arr[num].trim();;
         say(word);
+    }
+    
+    // Function to speak the word
+    function say(word) {
+        const voice = new SpeechSynthesisUtterance();
+        voice.text = word;
+        voice.rate = 0.5;
+        speechSynthesis.speak(voice);
+    }
 
-    })
-
-    // //For next button
-    // // It creates an event when 'skip' button is clicked
-    // document.getElementById('skip').addEventListener('click', function () {
-    //     //call the function getWord() and if the promise is successfull put the parsed json output as data
-    //     getWord().then(data => {
-    //         //speak data
-    //         say(data[0]);
-    //         //variable word has the new word
-    //         word = data[0];
-    //     });  
-    // })
-
-    //For repeat button
+    // Event listener for the "Repeat" button
     document.getElementById('speak').addEventListener('click', function () {
-        say(word)
-    })
+        say(word);
+    });
 
-    //for submit button
-document.getElementById('sub').addEventListener('click', function () {
-    // Convert input value and word to lowercase for case-insensitive comparison
-    const inputValue = document.getElementById('inp').value.toLowerCase();
-    const lowercaseWord = word.toLowerCase();
+    // Event listener for the "Submit" button
+    document.getElementById('sub').addEventListener('click', function () {
+        const inputValue = document.getElementById('inp').value.trim().toLowerCase();
+        const lowercaseWord = word.toLowerCase();
 
-    if (inputValue === lowercaseWord) {
-        let voice = new SpeechSynthesisUtterance()
-        voice.text = "Correct, Press Next"
-        speechSynthesis.speak(voice)
-    }
-    else {
-        let voice = new SpeechSynthesisUtterance()
-        voice.text = "Oops, Learn the correct spelling"
-        speechSynthesis.speak(voice)
-        alert(`${word}`)
-    }
-    document.getElementById('inp').value = ''
-})
+        if (inputValue === lowercaseWord) {
+            score++;
+            document.getElementById('score').innerText = "Score: " + score;
+            let voice = new SpeechSynthesisUtterance();
+            voice.text = "Correct, The next word is";
+            speechSynthesis.speak(voice);
+            getNewWord();
+        } else {
+            let voice = new SpeechSynthesisUtterance();
+            voice.text = "Oops, Learn the correct spelling";
+            speechSynthesis.speak(voice);
+            alert(`${word}`);
+        }
+        document.getElementById('inp').value = '';
+    });
 
+    // Event listener for the Enter key press
+    document.getElementById('inp').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            document.getElementById('sub').click();
+        }
+    });
+
+    // Initialize the game
+    getNewWord();
 </script>
+</body>
+</html>
