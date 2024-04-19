@@ -143,6 +143,7 @@
             getNewWord();
         } else {
             score=0;
+            document.getElementById('score').innerText = "Score: " + score;
             let voice = new SpeechSynthesisUtterance();
             voice.text = "Oops, Learn the correct spelling";
             speechSynthesis.speak(voice);
