@@ -142,6 +142,7 @@
             speechSynthesis.speak(voice);
             getNewWord();
         } else {
+            score=0;
             let voice = new SpeechSynthesisUtterance();
             voice.text = "Oops, Learn the correct spelling";
             speechSynthesis.speak(voice);
