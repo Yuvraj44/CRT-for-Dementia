@@ -73,7 +73,7 @@ function startGame() {
             card.onload = function() {
                 imagesLoaded++;
                 if (imagesLoaded === totalImages) {
-                    setTimeout(hideCards, 0);
+                    setTimeout(hideCards, 5000);
                 }
             };
 
